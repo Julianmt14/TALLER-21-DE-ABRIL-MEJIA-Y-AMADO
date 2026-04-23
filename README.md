@@ -1,10 +1,10 @@
-# Bookstore API 📚
+# Bookstore API
 
 API REST para una librería en línea construida con **Spring Boot 3**, **Spring Security (JWT)**, **Spring Data JPA** y **H2/PostgreSQL**.
 
 ---
 
-## 📊 Modelo de Datos (Diagrama ER)
+## Modelo de Datos (Diagrama ER)
 
 ```mermaid
 erDiagram
@@ -52,7 +52,7 @@ erDiagram
 
 ---
 
-## 🛠️ Tecnologías y Requisitos
+## Tecnologías y Requisitos
 
 - **Java 17** (JDK recomendado)
 - **Gradle** (Wrapper incluido)
@@ -64,7 +64,7 @@ erDiagram
 
 ---
 
-## 🚀 Configuración y Ejecución Local
+## Configuración y Ejecución Local
 
 ### 1. Clonar el repositorio
 ```bash
@@ -90,7 +90,7 @@ La aplicación estará disponible en: `http://localhost:8080/api/v1`
 
 ---
 
-## 🔑 Autenticación y Roles
+## Autenticación y Roles
 
 El sistema maneja dos roles principales:
 
@@ -105,7 +105,7 @@ El sistema maneja dos roles principales:
 
 ---
 
-## 📖 Documentación de la API
+## Documentación de la API
 
 - **Swagger UI**: [http://localhost:8080/api/v1/swagger-ui.html](http://localhost:8080/api/v1/swagger-ui.html)
 - **H2 Console**: [http://localhost:8080/api/v1/h2-console](http://localhost:8080/api/v1/h2-console) (JDBC URL: `jdbc:h2:mem:bookstoredb`)
@@ -115,7 +115,7 @@ Importa el archivo ubicado en: `postman/bookstore-api.postman_collection.json`
 
 ---
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```text
 src/main/java/com/taller/bookstore
