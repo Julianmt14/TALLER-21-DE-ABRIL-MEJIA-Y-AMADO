@@ -1,13 +1,12 @@
-package com.example.talleramadoymejia22deabaril;
+package com.taller.bookstore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Talleramadoymejia22deabarilApplicationTests {
+class BookstoreApiApplicationTests {
 
     @Test
     void contextLoads() {
     }
-
 }

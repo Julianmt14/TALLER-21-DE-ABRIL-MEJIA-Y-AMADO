@@ -1,13 +1,12 @@
-package com.example.talleramadoymejia22deabaril;
+package com.taller.bookstore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Talleramadoymejia22deabarilApplication {
+public class BookstoreApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Talleramadoymejia22deabarilApplication.class, args);
+        SpringApplication.run(BookstoreApiApplication.class, args);
     }
-
 }
