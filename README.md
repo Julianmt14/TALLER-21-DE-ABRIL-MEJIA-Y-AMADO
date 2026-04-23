@@ -1,171 +1,132 @@
-# bookstore-api
+# Bookstore API 📚
 
-API REST para una librería en línea construida con Spring Boot 3, JWT, JPA y arquitectura por capas.
+API REST para una librería en línea construida con **Spring Boot 3**, **Spring Security (JWT)**, **Spring Data JPA** y **H2/PostgreSQL**.
 
-## Tecnologías
+---
 
-- Java 17
-- Spring Boot 3
-- Spring Web
-- Spring Data JPA
-- Spring Security
-- JWT
-- H2 para desarrollo
-- PostgreSQL para producción
-- Swagger / OpenAPI
-- Maven y Gradle Wrapper
+## 📊 Modelo de Datos (Diagrama ER)
 
-## Requisitos
+```mermaid
+erDiagram
+    USER ||--o{ ORDER : "realiza"
+    USER {
+        long id PK
+        string full_name
+        string email
+        string password
+        string role "USER, ADMIN"
+    }
+    ORDER ||--|{ ORDER_ITEM : "contiene"
+    ORDER {
+        long id PK
+        long user_id FK
+        string status "PENDING, CONFIRMED, CANCELLED"
+        decimal total
+        datetime created_at
+    }
+    ORDER_ITEM }|--|| BOOK : "referencia"
+    ORDER_ITEM {
+        long id PK
+        long order_id FK
+        long book_id FK
+        int quantity
+        decimal subtotal
+    }
+    BOOK }|--|| AUTHOR : "escrito por"
+    BOOK {
+        long id PK
+        string title
+        string description
+        decimal price
+        int stock
+        string isbn
+        long author_id FK
+    }
+    BOOK }|--|{ CATEGORY : "pertenece a"
+    CATEGORY {
+        long id PK
+        string name
+        string description
+    }
+```
 
-- Java 17+
-- Maven 3.8+ opcional
-- O usar `gradlew.bat`
+---
 
-## Ejecución
+## 🛠️ Tecnologías y Requisitos
 
-### Con Gradle Wrapper
+- **Java 17** (JDK recomendado)
+- **Gradle** (Wrapper incluido)
+- **Spring Boot 3.2.x**
+- **JWT** para autenticación segura
+- **H2 Database** (Memoria para desarrollo)
+- **PostgreSQL** (Configurado para producción)
+- **Lombok** y **MapStruct**
 
+---
+
+## 🚀 Configuración y Ejecución Local
+
+### 1. Clonar el repositorio
+```bash
+git clone <url-del-repositorio>
+cd talleramadoymejia22deabaril
+```
+
+### 2. Configuración de Variables (Opcional en dev)
+El proyecto usa valores por defecto para desarrollo, pero puedes personalizarlos:
+- `JWT_SECRET`: Llave para firmar tokens (Base64).
+- `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`: Credenciales de base de datos.
+
+### 3. Ejecución con Gradle
 ```powershell
+# Windows
 .\gradlew.bat bootRun
+
+# Linux/Mac
+./gradlew bootRun
 ```
 
-### Con Maven
+La aplicación estará disponible en: `http://localhost:8080/api/v1`
 
-```powershell
-mvn spring-boot:run
-```
+---
 
-## Variables de entorno
+## 🔑 Autenticación y Roles
 
-- `JWT_SECRET`
-- `JWT_EXPIRATION`
-- `DB_URL`
-- `DB_USERNAME`
-- `DB_PASSWORD`
+El sistema maneja dos roles principales:
 
-## Perfiles
+| Rol | Permisos |
+| :--- | :--- |
+| `ADMIN` | Gestión total de catálogo (Autores, Libros, Categorías) y gestión de pedidos. |
+| `USER` | Consulta de catálogo, gestión de pedidos propios. |
 
-- `dev`: H2 en memoria, datos iniciales y consola H2
-- `prod`: PostgreSQL
+### Credenciales de Prueba (Perfil Dev)
+- **Admin**: `admin@bookstore.com` / `Admin1234`
+- **User**: `user@bookstore.com` / `User12345`
 
-## URLs útiles
+---
 
-- API base: `http://localhost:8080/api/v1`
-- Swagger UI: `http://localhost:8080/api/v1/swagger-ui.html`
-- H2 Console: `http://localhost:8080/api/v1/h2-console`
+## 📖 Documentación de la API
 
-## Credenciales iniciales en dev
+- **Swagger UI**: [http://localhost:8080/api/v1/swagger-ui.html](http://localhost:8080/api/v1/swagger-ui.html)
+- **H2 Console**: [http://localhost:8080/api/v1/h2-console](http://localhost:8080/api/v1/h2-console) (JDBC URL: `jdbc:h2:mem:bookstoredb`)
 
-- Admin
-  - email: `admin@bookstore.com`
-  - password: `Admin1234`
-- User
-  - email: `user@bookstore.com`
-  - password: `User12345`
+### Colección de Postman
+Importa el archivo ubicado en: `postman/bookstore-api.postman_collection.json`
 
-## Estructura del proyecto
+---
+
+## 📂 Estructura del Proyecto
 
 ```text
 src/main/java/com/taller/bookstore
-├── config
-├── controller
-├── dto
-│   ├── request
-│   └── response
-├── entity
-├── exception
-│   ├── custom
-│   └── handler
-├── mapper
-├── repository
-├── security
-├── service
-└── impl
+├── controller  # Endpoints REST
+├── service     # Lógica de negocio (Interfaces)
+├── impl        # Implementación de servicios
+├── entity      # Modelos de JPA
+├── dto         # Objetos de transferencia de datos (Request/Response)
+├── repository  # Interfaces de Spring Data JPA
+├── mapper      # Mapeo de Entidades <-> DTOs
+├── security    # Configuración de JWT y Spring Security
+└── exception   # Manejo global de errores
 ```
 
-## Flujo básico JWT
-
-1. Registrar usuario en `POST /auth/register`
-2. Autenticarse en `POST /auth/login`
-3. Copiar `token`
-4. Enviar `Authorization: Bearer <token>`
-5. Consumir endpoints protegidos
-
-## Reglas de acceso
-
-- Públicos:
-  - `POST /auth/register`
-  - `POST /auth/login`
-  - `GET /books/**`
-  - `GET /authors/**`
-  - `GET /categories/**`
-- `ADMIN`:
-  - CRUD de libros, autores y categorías
-  - `GET /orders`
-  - `PUT /orders/{id}/confirm`
-- `USER`:
-  - `POST /orders`
-  - `GET /orders/my`
-- `USER` y `ADMIN`:
-  - `GET /orders/{id}`
-  - `PUT /orders/{id}/cancel`
-
-## Probar con Postman
-
-Importa [postman/bookstore-api.postman_collection.json](postman/bookstore-api.postman_collection.json).
-
-## Ejemplos rápidos
-
-### Login
-
-```json
-{
-  "email": "admin@bookstore.com",
-  "password": "Admin1234"
-}
-```
-
-### Crear libro
-
-```json
-{
-  "title": "Domain-Driven Design",
-  "description": "Strategic design and tactical patterns",
-  "price": 149.9,
-  "stock": 12,
-  "isbn": "9780321125217",
-  "authorId": 1,
-  "categoryIds": [1, 2]
-}
-```
-
-### Crear pedido
-
-```json
-{
-  "items": [
-    {
-      "bookId": 1,
-      "quantity": 2
-    }
-  ]
-}
-```
-
-## Git sugerido
-
-- `main`
-- `develop`
-- `feature/auth-module`
-- `feature/book-catalog`
-- `feature/order-management`
-- `feature/author-category`
-
-### Ejemplos de commits
-
-- `feat: add JWT authentication filter`
-- `fix: correct price validation in BookRequest`
-- `refactor: extract order total calculation to service`
-- `docs: add endpoint documentation in AuthController`
-- `test: add unit tests for OrderMapper`
-- `chore: update application.yml with JWT config`
