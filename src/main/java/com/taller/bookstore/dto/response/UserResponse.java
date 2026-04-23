@@ -1,0 +1,9 @@
+package com.taller.bookstore.dto.response;
+
+public record UserResponse(
+        Long id,
+        String fullName,
+        String email,
+        String role
+) {
+}
